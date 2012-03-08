@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/home/vcakarev/libs/java/commons-math-2.2/commons-math-2.2.jar" sourcepath="/home/vcakarev/libs/java/commons-math-2.2/commons-math-2.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/vcakarev/libs/java/commons-math-2.2/commons-math-2.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/vcakarev/libs/java/commons-math-2.2/commons-math-2.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/vcakarev/libs/java/commons-math-2.2/commons-math-2.2-sources.jar"/>
+	<classpathentry kind="lib" path="/home/vcakarev/workspace/javacsv2.1/javacsv.jar" sourcepath="/javacsv2.1/src"/>
+	<classpathentry kind="lib" path="/javacsv2.1/src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
