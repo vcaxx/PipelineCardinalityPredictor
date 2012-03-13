@@ -59,7 +59,8 @@ public class PCPredictor {
 			durations[i][1] = pDurations[i];
 			misses[i][1] = pMisses[i];
 			
-			plines[i] = new SWPipeline(noStages, durations[i], misses[i], lockTime, fpInstr[i]);
+			plines[i] = new SWPipeline(noStages, durations[i], 
+					misses[i], lockTime, fpInstr[i]);
 		}
 		
 		return plines;

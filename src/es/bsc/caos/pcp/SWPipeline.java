@@ -13,7 +13,9 @@ import java.util.Set;
  */
 public class SWPipeline implements Pipeline {
 	
-	public static String basicStageOrder[] = {"RX", "IPFWD", "TX"};
+	public static String basicStageOrder[] = {"RX", "IPFWD", "TX", 
+		"X0", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9",
+		"X10", "X11", "X12"};
 	private int numStages;
 	private int stageDurations[];
 	private int originalStageDurations[];
@@ -30,6 +32,8 @@ public class SWPipeline implements Pipeline {
 	private double[] stageFPinstr;
 	private int[] stageReps;
 	
+	private int[] ordIndx;
+	
 
 	/**
 	 * @param numStages The number of stages in the pipeline
@@ -40,11 +44,11 @@ public class SWPipeline implements Pipeline {
 	 */
 	public SWPipeline(int numStages, int[] stageDurations,
 			double[] stageL2Misses, int lockDurat, String[] stageNombres,
-			double[] stageFpMisses) {
+			double[] stageFpMisses, int[] ordIndxes) {
 		super();
 		
-		int ordIndx[] = getOrdIndexes(stageNombres, SWPipeline.basicStageOrder);
-		
+		ordIndx = new int[numStages];
+		System.arraycopy(ordIndxes, 0, this.ordIndx, 0, numStages);
 		
 		this.numStages = numStages;
 		this.stageDurations = new int[numStages]; 
@@ -68,22 +72,29 @@ public class SWPipeline implements Pipeline {
 		for(int ind = 0; ind < numStages; ind++)
 		{
 			int ordIndex = ordIndx[ind];
-			this.originalStageDurations[ind] = 
-				this.stageDurations[ind] = stageDurations[ordIndex];
-			this.stageNames[ind] = stageNombres[ordIndex];
-			this.originalL2Misses[ind] = 
-				this.stageL2Misses[ind] = stageL2Misses[ordIndex];
-			this.stageFPinstr[ind] = stageFpMisses[ordIndex];
+			this.originalStageDurations[ordIndex] = 
+				this.stageDurations[ordIndex] = stageDurations[ind];
+			this.stageNames[ordIndex] = stageNombres[ind];
+			this.originalL2Misses[ordIndex] = 
+				this.stageL2Misses[ordIndex] = stageL2Misses[ind];
+			this.stageFPinstr[ordIndex] = stageFpMisses[ind];
+			stageOrder[ordIndex] = stageNombres[ind];
 			
 		}
 		
-		System.arraycopy(SWPipeline.basicStageOrder, 0, this.stageOrder, 0, SWPipeline.basicStageOrder.length);
+//		System.arraycopy(SWPipeline.basicStageOrder, 0, this.stageOrder, 0, SWPipeline.basicStageOrder.length);
 	}
 	
+	/*
+	 * Uses standard stage names when names are not provided. The first
+	 * three stage names are Rx,Px,Tx, followed by Xn. Maximum is 16 unnamed stages.
+	 */
 	public SWPipeline(int numStages, int[] stageDurations,
-			double[] stageL2Misses, int commDurat, double[] fpInst)
+			double[] stageL2Misses, int commDurat, 
+			double[] fpInst, int[] orderedIndxs)
 	{
-		this(numStages, stageDurations, stageL2Misses, commDurat, SWPipeline.basicStageOrder, fpInst);
+		this(numStages, stageDurations, stageL2Misses, 
+				commDurat, SWPipeline.basicStageOrder, fpInst, orderedIndxs);
 	}
 
 //	/**
@@ -101,9 +112,11 @@ public class SWPipeline implements Pipeline {
 	
 	public SWPipeline(SWPipeline pipe) {
 		super();
+		
 		this.numStages = pipe.numStages;
 		this.stageDurations = new int[numStages]; 
 		
+		this.ordIndx = new int[numStages];
 		this.stageNames = new String[numStages];
 		this.commCostIn = new int[numStages];
 		this.commCostOut = new int[numStages];
@@ -114,6 +127,8 @@ public class SWPipeline implements Pipeline {
 		this.lockDurationSingleStage = pipe.lockDurationSingleStage;
 		this.lockDuration = pipe.lockDuration;
 		
+		
+		System.arraycopy(pipe.ordIndx, 0, this.ordIndx, 0, numStages);
 		System.arraycopy(pipe.stageDurations, 0, this.stageDurations, 0, numStages);
 		System.arraycopy(pipe.originalStageDurations, 0, this.originalStageDurations, 0, numStages);
 		System.arraycopy(pipe.stageNames, 0, this.stageNames, 0, numStages);
@@ -130,6 +145,28 @@ public class SWPipeline implements Pipeline {
 		this.stageFPinstr = new double[numStages];
 		
 		System.arraycopy(pipe.stageFPinstr, 0, this.stageFPinstr, 0, numStages);
+	}
+	
+	private static int[] fillIndexes(int max)
+	{
+		int indexes[] = new int[max];
+		for(int i = 0; i <  max; i++)
+			indexes[i] = i;
+		return indexes;
+	}
+	
+	public SWPipeline(int numStages, int[] stageDurations,
+			double[] stageL2Misses, int lockDurat, String[] stageNombres,
+			double[] stageFpMisses)
+	{
+		this(numStages, stageDurations, stageL2Misses, lockDurat,
+				stageNombres, stageFpMisses, fillIndexes(numStages));
+	}
+	
+
+	public SWPipeline(int noStages, int[] stageDur, double[] l2Miss, 
+			int lockTime,	double[] fpMisses) {
+		this(noStages, stageDur, l2Miss, lockTime, fpMisses, fillIndexes(noStages));
 	}
 
 	/**
