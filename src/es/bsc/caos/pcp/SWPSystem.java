@@ -139,7 +139,7 @@ public class SWPSystem implements PipelineSystem {
 	 * Updates @arg stageID duration
 	 * Gets the number of memory accesses of the stage, and adds the difference between newMemAccessTime and oldMemAccessTime
 	 */
-	void adjustMemDurationOneStage(double oldMemAccessTime, double newMemAccessTime, int stageID) {
+	private void adjustMemDurationOneStage(double oldMemAccessTime, double newMemAccessTime, int stageID) {
 			int newDuration = pipe.getStageDuration(stageID);
 			double memAccesses = pipe.getStageMemAccesses(stageID);
 			newDuration += Math.ceil((newMemAccessTime - oldMemAccessTime) * memAccesses); 
@@ -148,7 +148,7 @@ public class SWPSystem implements PipelineSystem {
 		
 	}
 	
-	void adjustMemDurationOneStageVSSingle(double oldMemAccessTime, double newMemAccessTime, int stageID) {
+	private void adjustMemDurationOneStageVSSingle(double oldMemAccessTime, double newMemAccessTime, int stageID) {
 		int newDuration = pipe.getSingleModeDuration(stageID);
 		double memAccesses = pipe.getStageSingleModeMemAccesses(stageID);
 		newDuration += Math.ceil((newMemAccessTime - oldMemAccessTime) * memAccesses); 

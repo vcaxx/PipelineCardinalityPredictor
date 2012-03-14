@@ -15,11 +15,24 @@ import org.junit.Test;
  */
 public class MemoryQModelFunctionTest {
 
+	static int sMinMemTime = 180;
+	static int sMaxMemTime = 180 * 64;
+	static int sNumOfBanks = 4;
+	
+	MemoryQueueModelSolver sMSolver;
+	MemoryQModelFunction sMFunct;
+	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		sMSolver = new MemoryQueueModelSolver(sMinMemTime, 
+				sMaxMemTime, sNumOfBanks);
+		sMFunct = new MemoryQModelFunction(sMSolver);
+		
+		
 	}
 
 	/**

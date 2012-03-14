@@ -15,11 +15,39 @@ import org.junit.Test;
  */
 public class MemoryQueueModelSolverTest {
 
+	static int sMinMemTime = 180;
+	static int sMaxMemTime = 180 * 64;
+	static int sNumOfBanks = 4;
+	
+	int sNumStages = 5;
+	int sDurations[] = {200, 1500, 1500, 460, 701};
+	double sMises[] = {0.0, 9.0, 3.333, 1.51, 0.0};
+	int sLockDur = 200;
+	String sNombres[] = {"Ars", "Ders", "DD", "Teex", "Bh"};
+	double sFpMisses[] = {0.0, 0.0, 0.0, 0.0, 15.0};
+	int sStOrder[] = {1, 2, 4, 0, 3};
+	
+	int sOrderedDurations[] = {460, 200, 1500, 701, 1500};
+	double sOrderdMisses[] = {4.01, 0.0, 12.0, 0.0, 3.333};
+	double sOrderdFPMisses[] = {0.0, 0.0, 0.0, 15.0, 0.0};
+	
+	
+	SWPipeline sPipe;
+	SWPSystem onePipeSystem;
+	SWPSystem overloadedPipeSystem;
+	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		sPipe = new SWPipeline(sNumStages, sDurations, sMises, 
+				sLockDur, sNombres, sFpMisses, sStOrder);
+		
+		
+		
+		
 	}
 
 	/**
@@ -34,6 +62,13 @@ public class MemoryQueueModelSolverTest {
 	 */
 	@Test
 	public void testMemoryQueueModelSolver() {
+		MemoryQueueModelSolver mSolver = new MemoryQueueModelSolver(
+				sMinMemTime, sMaxMemTime, sNumOfBanks);
+		
+//		mSolver.getMemAccessTime(onePipeSystem);
+//		mSolver.getMemAccessTime(overloadedPipeSystem);
+		
+		
 		fail("Not yet implemented"); // TODO
 	}
 
